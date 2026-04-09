@@ -1,0 +1,23 @@
+{
+  "name": "mkt-growth-aios",
+  "version": "1.0.0",
+  "description": "Sistema AIOS para Performance Marketing - Relatórios, Rastreamento e Automações",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "reports": "node src/modules/reports.js",
+    "tracking": "node src/modules/tracking.js",
+    "automation": "node src/modules/automation.js"
+  },
+  "keywords": ["marketing", "performance", "aios", "automation"],
+  "author": "Eduardo",
+  "license": "MIT",
+  "dependencies": {
+    "aiox-core": "latest",
+    "axios": "^1.6.0",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {}
+}
