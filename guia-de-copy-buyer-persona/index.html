@@ -459,6 +459,130 @@
       margin-top: 2px;
     }
 
+    /* ===== PROMPT SECTION ===== */
+    .prompt-section {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 36px 40px;
+      margin-bottom: 52px;
+      box-shadow: 0 2px 16px rgba(4,58,209,.06);
+    }
+
+    .prompt-card {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .prompt-card-header {
+      background: var(--dark);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .prompt-icon { font-size: 22px; }
+    .prompt-title {
+      font-family: 'Prompt', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .prompt-sub { font-size: 12px; color: var(--cyan); margin-top: 2px; }
+
+    .copy-btn {
+      margin-left: auto;
+      background: var(--orange);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-family: 'Prompt', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .15s;
+      white-space: nowrap;
+    }
+    .copy-btn:hover { background: #e05500; }
+    .copy-btn.copied { background: var(--green); }
+
+    .prompt-body {
+      background: #0a1628;
+      color: #c8d8f8;
+      padding: 24px 28px;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 12.5px;
+      line-height: 1.85;
+      white-space: pre-wrap;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .prompt-vars {
+      padding: 18px 24px;
+      background: var(--light);
+    }
+    .vars-title {
+      font-family: 'Prompt', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--gray);
+      margin-bottom: 12px;
+    }
+    .vars-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    @media (max-width: 600px) { .vars-grid { grid-template-columns: 1fr; } }
+    .var-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--dark);
+    }
+    .var-tag {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-family: 'Prompt', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .var-tag.decisor       { background: #EBF0FF; color: var(--decisor-color); }
+    .var-tag.champion      { background: #FFF0E6; color: var(--champion-color); }
+    .var-tag.influenciador { background: #E8F5EE; color: var(--influenciador-color); }
+    .var-tag.blocker       { background: #F0EAF9; color: var(--blocker-color); }
+
+    .example-card {
+      border: 1.5px dashed var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .example-header {
+      background: var(--light);
+      padding: 12px 20px;
+      font-family: 'Prompt', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .example-body {
+      padding: 16px 20px;
+      font-size: 13.5px;
+      line-height: 1.9;
+      color: var(--dark);
+      white-space: pre-wrap;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+    }
+
     /* ===== FOOTER ===== */
     .footer {
       text-align: center;
@@ -893,11 +1017,102 @@ Não precisa decidir nada agora.</div>
     </div>
   </div>
 
+  <!-- PROMPT IA -->
+  <div class="prompt-section">
+    <div class="section-title">Prompt para Criar Copy com IA</div>
+    <p style="font-size:14px;color:var(--gray);margin-bottom:20px;">Cole este prompt em qualquer IA (Claude, ChatGPT, Gemini). Preencha os campos entre <strong style="color:var(--orange)">[colchetes]</strong> antes de enviar.</p>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <span class="prompt-icon">🤖</span>
+        <div>
+          <div class="prompt-title">Prompt Universal — Copy por Persona Prolog</div>
+          <div class="prompt-sub">Funciona para anúncio, email, vídeo, landing page ou post</div>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt()">Copiar prompt</button>
+      </div>
+
+      <div class="prompt-body" id="prompt-text">Você é um especialista em copywriting B2B para empresas de gestão de frota.
+
+Preciso que você crie uma peça de copy para a Prolog App seguindo rigorosamente as instruções abaixo.
+
+## PERSONA-ALVO
+- Nome da persona: [Decisor / Champion / Influenciador / Blocker]
+- Perfil resumido:
+  - Decisor (Carlos, 52) → quer controle, previsibilidade e ROI comprovado
+  - Champion (Rogério, 38) → quer alívio operacional e resultado imediato
+  - Influenciador (João, 39) → quer confiança de que vai funcionar na prática
+  - Blocker (Marcos, 47) → quer garantia de que não vai quebrar nada existente
+
+## PEÇA SOLICITADA
+- Formato: [anúncio LinkedIn / email / roteiro de vídeo / post Instagram / landing page / WhatsApp]
+- Estágio da jornada: [Consciência / Consideração / Decisão]
+- Comprimento: [curto (até 5 linhas) / médio (até 15 linhas) / longo]
+
+## PRODUTO / MENSAGEM
+- O que estamos promovendo: [ex: rastreamento de frota em tempo real / gestão de pneus / controle de manutenção]
+- Diferencial principal: [ex: visibilidade em tempo real sem planilha / implementação em 7 dias / integração com ERP]
+- Número ou prova disponível: [ex: redução de 23% no custo / ROI médio de 8 meses / case da Transportadora X]
+
+## REGRAS OBRIGATÓRIAS
+1. Use pelo menos UMA das palavras-gatilho da persona
+2. Evite todos os termos bloqueadores da persona
+3. Inclua o CTA adequado: Decisor → "Veja o case"; Champion → "Teste agora"; Influenciador → "Veja como funciona"; Blocker → "Consulte arquitetura"
+4. Tom: Decisor = profissional/dados | Champion = direto/prático | Influenciador = pragmático/técnico | Blocker = cauteloso/estruturado
+5. NÃO use: "revolucionário", "disruptivo", "solução completa", "transformação total", "inovador"
+6. A copy deve passar no teste: "essa persona específica reconheceria o problema descrito?"
+
+## OUTPUT ESPERADO
+Entregue:
+1. A peça de copy pronta para uso
+2. Uma linha explicando qual gatilho principal foi usado
+3. Uma sugestão de A/B test (versão alternativa do headline)</div>
+
+      <div class="prompt-vars">
+        <div class="vars-title">Campos para preencher antes de enviar:</div>
+        <div class="vars-grid">
+          <div class="var-item"><span class="var-tag decisor">Persona</span> Decisor / Champion / Influenciador / Blocker</div>
+          <div class="var-item"><span class="var-tag champion">Formato</span> anúncio / email / vídeo / post / landing page</div>
+          <div class="var-item"><span class="var-tag influenciador">Estágio</span> Consciência / Consideração / Decisão</div>
+          <div class="var-item"><span class="var-tag blocker">Produto</span> O que está sendo promovido nessa campanha</div>
+          <div class="var-item"><span class="var-tag decisor">Diferencial</span> O argumento principal dessa peça</div>
+          <div class="var-item"><span class="var-tag champion">Prova</span> Número, case ou depoimento disponível</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXEMPLO PREENCHIDO -->
+    <div class="example-card">
+      <div class="example-header">Exemplo preenchido — Champion, anúncio Meta, Consideração</div>
+      <div class="example-body">...Persona-alvo: <strong>Champion (Rogério, 38)</strong>
+Formato: <strong>anúncio Instagram/Meta</strong>
+Estágio: <strong>Consideração</strong>
+Produto: <strong>rastreamento de frota em tempo real</strong>
+Diferencial: <strong>visibilidade sem planilha, implementação em 7 dias</strong>
+Prova: <strong>redução de 40% no retrabalho operacional</strong></div>
+    </div>
+
+  </div><!-- /prompt-section -->
+
 </div><!-- /container -->
 
 <footer class="footer">
   Criado por <strong>LLM Wiki Agent</strong> · <span>Prolog App</span> &nbsp;|&nbsp; Q1 2026 &nbsp;|&nbsp; Atualizar quando: novas personas identificadas, novos cases validados, mudança de produto.
 </footer>
 
+<script>
+  function copyPrompt() {
+    const text = document.getElementById('prompt-text').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copiado!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copiar prompt';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+</script>
 </body>
 </html>
