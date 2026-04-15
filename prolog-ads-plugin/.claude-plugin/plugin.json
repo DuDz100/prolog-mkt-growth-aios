@@ -1,0 +1,9 @@
+{
+  "name": "prolog-ads",
+  "version": "0.1.0",
+  "description": "Google Ads management plugin for Prolog App — search term mining, budget optimization, creative audits, and weekly reviews powered by GAQL MCP.",
+  "author": {
+    "name": "Eduardo"
+  },
+  "keywords": ["google-ads", "performance-marketing", "paid-search", "demand-gen"]
+}
