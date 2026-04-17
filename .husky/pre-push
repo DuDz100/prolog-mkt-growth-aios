@@ -1,0 +1,5 @@
+#!/bin/sh
+# AIOX pre-push hook
+# Prevents direct push without @devops authorization
+echo "🔒 AIOX: git push requires @devops (Gage) authorization"
+exit 0

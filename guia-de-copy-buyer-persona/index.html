@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Copy por Persona — Prolog App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== TOKENS DE COR PROLOG ===== */
+    :root {
+      --blue:        #043ad1;
+      --dark:        #141a36;
+      --cyan:        #00eeff;
+      --orange:      #ff6200;
+      --white:       #FFFFFF;
+      --light:       #F2F5FC;
+      --border:      #DDE3F0;
+      --gray:        #7A85A0;
+      --green:       #1DB954;
+      --red:         #E53E3E;
+
+      --decisor-color:         #043ad1;
+      --champion-color:        #ff6200;
+      --influenciador-color:   #0a8c4e;
+      --blocker-color:         #6b35b5;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Figtree', sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4, h5, .logo-text, .section-title, .persona-name,
+    .persona-role, .header-tagline, .step-title, .regra-num,
+    .checklist-group h4, .th-label {
+      font-family: 'Prompt', sans-serif;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      background: var(--dark);
+      padding: 28px 48px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      border-bottom: 3px solid var(--blue);
+    }
+
+    /* Logo SVG inline */
+    .logo-mark {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+    }
+
+    .logo-wordmark {
+      font-family: 'Prompt', sans-serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: 44px;
+      background: rgba(255,255,255,0.15);
+      margin: 0 4px;
+    }
+
+    .header-info { display: flex; flex-direction: column; gap: 3px; }
+    .header-title {
+      font-family: 'Prompt', sans-serif;
+      color: var(--white);
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .header-tagline {
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ===== CONTAINER ===== */
+    .container { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
+
+    /* ===== INTRO BLOCK ===== */
+    .intro {
+      background: var(--dark);
+      color: var(--white);
+      border-radius: 14px;
+      padding: 36px 40px;
+      margin-bottom: 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .intro::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 5px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--blue), var(--cyan));
+    }
+    .intro h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--white);
+    }
+    .intro h1 span { color: var(--cyan); }
+    .intro p { opacity: 0.78; font-size: 14.5px; max-width: 720px; }
+    .intro strong { color: var(--cyan); opacity: 1; }
+
+    /* ===== SECTION TITLE ===== */
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--blue);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 14px;
+      background: var(--cyan);
+      border-radius: 2px;
+    }
+
+    /* ===== MATRIZ RÁPIDA ===== */
+    .matriz {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(4,58,209,.08);
+      margin-bottom: 52px;
+    }
+    .matriz thead { background: var(--dark); }
+    .matriz thead th {
+      color: var(--white);
+      font-family: 'Prompt', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 16px 14px;
+      text-align: left;
+    }
+    .matriz thead th small { font-weight: 400; opacity: 0.6; font-family: 'Figtree', sans-serif; }
+    .matriz thead th.th-decisor       { border-top: 3px solid var(--decisor-color); }
+    .matriz thead th.th-champion      { border-top: 3px solid var(--champion-color); }
+    .matriz thead th.th-influenciador { border-top: 3px solid var(--influenciador-color); }
+    .matriz thead th.th-blocker       { border-top: 3px solid var(--blocker-color); }
+
+    .matriz tbody tr { border-bottom: 1px solid var(--border); }
+    .matriz tbody tr:last-child { border-bottom: none; }
+    .matriz tbody tr:hover { background: #F0F4FF; }
+    .matriz tbody td { padding: 11px 14px; font-size: 13.5px; vertical-align: top; }
+    .matriz tbody td:first-child {
+      font-family: 'Prompt', sans-serif;
+      font-weight: 600;
+      color: var(--gray);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      width: 145px;
+    }
+    .matriz tbody td strong { color: var(--dark); }
+
+    /* ===== PERSONA CARDS ===== */
+    .personas-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-bottom: 52px;
+    }
+    @media (max-width: 768px) { .personas-grid { grid-template-columns: 1fr; } }
+
+    .persona-card {
+      background: var(--white);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 18px rgba(4,58,209,.07);
+    }
+
+    .persona-card-header {
+      padding: 24px 28px 20px;
+      color: var(--white);
+      position: relative;
+    }
+    .persona-card-header.decisor       { background: var(--decisor-color); }
+    .persona-card-header.champion      { background: var(--champion-color); }
+    .persona-card-header.influenciador { background: var(--influenciador-color); }
+    .persona-card-header.blocker       { background: var(--blocker-color); }
+
+    /* Cyan accent line on header */
+    .persona-card-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 2px;
+      background: rgba(0,238,255,0.35);
+    }
+
+    .persona-emoji { font-size: 28px; margin-bottom: 6px; display: block; }
+    .persona-role {
+      font-family: 'Prompt', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      opacity: 0.75;
+    }
+    .persona-name {
+      font-family: 'Prompt', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      margin: 3px 0 6px;
+    }
+    .persona-quote {
+      font-size: 13px;
+      font-style: italic;
+      opacity: 0.85;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      padding-top: 10px;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+
+    .persona-card-body { padding: 24px 28px; }
+
+    .card-label {
+      font-family: 'Prompt', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gray);
+      margin: 18px 0 8px;
+    }
+    .card-label:first-child { margin-top: 0; }
+
+    .botao-decisao {
+      background: var(--light);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13.5px;
+      border-left: 3px solid var(--cyan);
+      color: var(--dark);
+      line-height: 1.5;
+    }
+    .persona-card.decisor-card       .botao-decisao { border-left-color: var(--decisor-color); }
+    .persona-card.champion-card      .botao-decisao { border-left-color: var(--champion-color); }
+    .persona-card.influenciador-card .botao-decisao { border-left-color: var(--influenciador-color); }
+    .persona-card.blocker-card       .botao-decisao { border-left-color: var(--blocker-color); }
+
+    .lang-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .lang-table th {
+      text-align: left;
+      font-family: 'Prompt', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 6px 8px;
+      background: var(--light);
+    }
+    .lang-table th.use  { color: var(--green); }
+    .lang-table th.evite { color: var(--red); }
+    .lang-table td { padding: 5px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .lang-table tr:last-child td { border-bottom: none; }
+    .lang-table .use-cell  { color: #0a5c2e; }
+    .lang-table .evite-cell { color: #9b2c2c; text-decoration: line-through; opacity: 0.65; }
+
+    .template-box {
+      background: var(--dark);
+      color: #c8d8f8;
+      border-radius: 8px;
+      padding: 16px 18px;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 12px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      margin-top: 6px;
+      border-left: 3px solid var(--cyan);
+    }
+
+    .cta-badge {
+      display: inline-block;
+      background: var(--orange);
+      color: var(--white);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-family: 'Prompt', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 10px;
+      letter-spacing: 0.3px;
+    }
+    .persona-card.decisor-card       .cta-badge { background: var(--decisor-color); }
+    .persona-card.influenciador-card .cta-badge { background: var(--influenciador-color); }
+    .persona-card.blocker-card       .cta-badge { background: var(--blocker-color); }
+
+    .midias-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .midia-tag {
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-size: 12px;
+      color: var(--dark);
+    }
+
+    /* ===== JORNADA ===== */
+    .jornada-section {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 36px 40px;
+      margin-bottom: 52px;
+      box-shadow: 0 2px 16px rgba(4,58,209,.06);
+    }
+    .jornada-steps {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .jornada-step {
+      flex: 1;
+      min-width: 160px;
+      background: var(--light);
+      border-radius: 10px;
+      padding: 16px 14px;
+      border-top: 3px solid var(--blue);
+    }
+    .step-num {
+      font-family: 'Prompt', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+    .step-title {
+      font-family: 'Prompt', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+    .step-personas { display: flex; flex-direction: column; gap: 5px; }
+    .step-persona {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+    .step-persona.d { background: #EBF0FF; color: var(--decisor-color); }
+    .step-persona.c { background: #FFF0E6; color: var(--champion-color); }
+    .step-persona.i { background: #E8F5EE; color: var(--influenciador-color); }
+    .step-persona.b { background: #F0EAF9; color: var(--blocker-color); }
+
+    /* ===== REGRAS DE OURO ===== */
+    .regras-section {
+      background: var(--dark);
+      border-radius: 14px;
+      padding: 36px 40px;
+      margin-bottom: 52px;
+      color: var(--white);
+    }
+    .regras-section .section-title { color: var(--cyan); }
+    .regras-section .section-title::before { background: var(--blue); }
+    .regras-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 20px;
+    }
+    @media (max-width: 600px) { .regras-grid { grid-template-columns: 1fr; } }
+    .regra-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-left: 3px solid var(--blue);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+    .regra-num {
+      font-family: 'Prompt', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--cyan);
+      margin-bottom: 5px;
+    }
+    .regra-item strong { color: var(--cyan); }
+
+    /* ===== CHECKLIST ===== */
+    .checklist-section {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 36px 40px;
+      margin-bottom: 52px;
+      box-shadow: 0 2px 16px rgba(4,58,209,.06);
+    }
+    .checklist-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 20px;
+    }
+    @media (max-width: 640px) { .checklist-cols { grid-template-columns: 1fr; } }
+    .checklist-group h4 {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--blue);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--cyan);
+      display: inline-block;
+    }
+    .checklist-group ul { list-style: none; }
+    .checklist-group li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13.5px;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .checklist-group li:last-child { border-bottom: none; }
+    .check-box {
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+      border: 2px solid var(--border);
+      border-radius: 3px;
+      margin-top: 2px;
+    }
+
+    /* ===== PROMPT SECTION ===== */
+    .prompt-section {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 36px 40px;
+      margin-bottom: 52px;
+      box-shadow: 0 2px 16px rgba(4,58,209,.06);
+    }
+
+    .prompt-card {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .prompt-card-header {
+      background: var(--dark);
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .prompt-icon { font-size: 22px; }
+    .prompt-title {
+      font-family: 'Prompt', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .prompt-sub { font-size: 12px; color: var(--cyan); margin-top: 2px; }
+
+    .copy-btn {
+      margin-left: auto;
+      background: var(--orange);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      padding: 8px 18px;
+      font-family: 'Prompt', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .15s;
+      white-space: nowrap;
+    }
+    .copy-btn:hover { background: #e05500; }
+    .copy-btn.copied { background: var(--green); }
+
+    .prompt-body {
+      background: #0a1628;
+      color: #c8d8f8;
+      padding: 24px 28px;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 12.5px;
+      line-height: 1.85;
+      white-space: pre-wrap;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .prompt-vars {
+      padding: 18px 24px;
+      background: var(--light);
+    }
+    .vars-title {
+      font-family: 'Prompt', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--gray);
+      margin-bottom: 12px;
+    }
+    .vars-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    @media (max-width: 600px) { .vars-grid { grid-template-columns: 1fr; } }
+    .var-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--dark);
+    }
+    .var-tag {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-family: 'Prompt', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .var-tag.decisor       { background: #EBF0FF; color: var(--decisor-color); }
+    .var-tag.champion      { background: #FFF0E6; color: var(--champion-color); }
+    .var-tag.influenciador { background: #E8F5EE; color: var(--influenciador-color); }
+    .var-tag.blocker       { background: #F0EAF9; color: var(--blocker-color); }
+
+    .example-card {
+      border: 1.5px dashed var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .example-header {
+      background: var(--light);
+      padding: 12px 20px;
+      font-family: 'Prompt', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+    .example-body {
+      padding: 16px 20px;
+      font-size: 13.5px;
+      line-height: 1.9;
+      color: var(--dark);
+      white-space: pre-wrap;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      text-align: center;
+      padding: 28px;
+      color: var(--gray);
+      font-size: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .footer strong { color: var(--blue); }
+    .footer span { color: var(--cyan); }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <!-- Logo Prolog inline SVG -->
+  <svg class="logo-mark" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="48" height="48" rx="12" fill="#043ad1"/>
+    <path d="M24 14C19 14 14.5 17.5 13 22.5" stroke="#00eeff" stroke-width="3.2" stroke-linecap="round"/>
+    <path d="M24 20C21 20 18.5 21.8 17.5 24.5" stroke="white" stroke-width="3.2" stroke-linecap="round"/>
+    <circle cx="24" cy="30" r="2.8" fill="white"/>
+  </svg>
+  <div class="logo-wordmark">Prolog</div>
+  <div class="header-divider"></div>
+  <div class="header-info">
+    <div class="header-title">Guia de Copy por Buyer Persona</div>
+    <div class="header-tagline">Performance Marketing · Q1 2026</div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="intro">
+    <h1>✍️ Melhores Práticas de <span>Copy por Persona</span></h1>
+    <p>Escrever para "todo mundo" = persuadir ninguém. Cada persona tem um <strong>"botão de decisão"</strong> diferente. Use este guia para identificar para quem você está escrevendo e aplicar a linguagem, estrutura e CTA corretos — antes de publicar qualquer peça.</p>
+  </div>
+
+  <!-- MATRIZ RÁPIDA -->
+  <div class="section-title">Matriz Rápida — Copy por Persona</div>
+  <table class="matriz">
+    <thead>
+      <tr>
+        <th></th>
+        <th class="th-decisor">🖊️ Decisor<br><small>Carlos, 52</small></th>
+        <th class="th-champion">👑 Champion<br><small>Rogério, 38</small></th>
+        <th class="th-influenciador">🗣️ Influenciador<br><small>João, 39</small></th>
+        <th class="th-blocker">🚫 Blocker<br><small>Marcos, 47</small></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Ângulo</td>
+        <td>ROI + Economia</td>
+        <td>Alívio + Resultado</td>
+        <td>Viabilidade + Fit</td>
+        <td>Segurança + Governança</td>
+      </tr>
+      <tr>
+        <td>Tom</td>
+        <td>Profissional, Dados</td>
+        <td>Direto, Prático</td>
+        <td>Equilibrado, Técnico</td>
+        <td>Cauteloso, Estruturado</td>
+      </tr>
+      <tr>
+        <td>Gatilho #1</td>
+        <td>Números concretos</td>
+        <td>Economia de tempo</td>
+        <td>Sem fricção</td>
+        <td>Governança garantida</td>
+      </tr>
+      <tr>
+        <td>Gatilho #2</td>
+        <td>Cases comparáveis</td>
+        <td>Redução de retrabalho</td>
+        <td>Cases similares</td>
+        <td>Zero risco de integração</td>
+      </tr>
+      <tr>
+        <td>Gatilho #3</td>
+        <td>Impacto estratégico</td>
+        <td>Visibilidade de ganho</td>
+        <td>Suporte claro</td>
+        <td>Documentação técnica</td>
+      </tr>
+      <tr>
+        <td>CTA Ideal</td>
+        <td><strong>"Veja o case"</strong></td>
+        <td><strong>"Teste agora"</strong></td>
+        <td><strong>"Veja como funciona"</strong></td>
+        <td><strong>"Consulte arquitetura"</strong></td>
+      </tr>
+      <tr>
+        <td>Comprimento</td>
+        <td>Moderado</td>
+        <td>Curto</td>
+        <td>Médio-longo</td>
+        <td>Longo</td>
+      </tr>
+      <tr>
+        <td>Prova</td>
+        <td>ROI + financeiro</td>
+        <td>Depoimento de par</td>
+        <td>Case detalhado</td>
+        <td>Documentação técnica</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- PERSONAS CARDS -->
+  <div class="section-title">Guia Detalhado por Persona</div>
+  <div class="personas-grid">
+
+    <!-- DECISOR -->
+    <div class="persona-card decisor-card">
+      <div class="persona-card-header decisor">
+        <span class="persona-emoji">🖊️</span>
+        <div class="persona-role">Decisor</div>
+        <div class="persona-name">Carlos Andrade</div>
+        <div class="persona-quote">"Quero controle, previsibilidade e menos achismo."</div>
+      </div>
+      <div class="persona-card-body">
+        <div class="card-label">Botão de Decisão</div>
+        <div class="botao-decisao">Ele decide quando percebe que <strong>não mudar é mais arriscado e caro</strong> do que mudar — com prova concreta.</div>
+
+        <div class="card-label">Linguagem</div>
+        <table class="lang-table">
+          <thead><tr><th class="use">✅ Use</th><th class="evite">❌ Evite</th></tr></thead>
+          <tbody>
+            <tr><td class="use-cell">"Retorno comprovado de X%"</td><td class="evite-cell">"Revolucione sua empresa"</td></tr>
+            <tr><td class="use-cell">"Previsibilidade de custo"</td><td class="evite-cell">"Tendências do mercado"</td></tr>
+            <tr><td class="use-cell">"ROI justificável em Z meses"</td><td class="evite-cell">"Inovação disruptiva"</td></tr>
+            <tr><td class="use-cell">"Risco controlado"</td><td class="evite-cell">"Transformação total"</td></tr>
+          </tbody>
+        </table>
+
+        <div class="card-label">Template — LinkedIn</div>
+        <div class="template-box">Sua frota ainda depende de planilha
+para tomar decisão?
+
+Empresas similares reduziram custo
+operacional em 23% nos primeiros 6
+meses com Prolog.
+
+ROI médio comprovado: 8 meses.
+
+→ Veja o case completo</div>
+        <span class="cta-badge">CTA: "Veja o case completo →"</span>
+
+        <div class="card-label">Mídias Recomendadas</div>
+        <div class="midias-list">
+          <span class="midia-tag">LinkedIn</span>
+          <span class="midia-tag">Email com dados</span>
+          <span class="midia-tag">Webinar</span>
+          <span class="midia-tag">Apresentação comercial</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHAMPION -->
+    <div class="persona-card champion-card">
+      <div class="persona-card-header champion">
+        <span class="persona-emoji">👑</span>
+        <div class="persona-role">Champion</div>
+        <div class="persona-name">Rogério Fernandes</div>
+        <div class="persona-quote">"É nos centavos que a gente ganha."</div>
+      </div>
+      <div class="persona-card-body">
+        <div class="card-label">Botão de Decisão</div>
+        <div class="botao-decisao">Ele decide quando vê <strong>impacto real e imediato na sua rotina</strong> — algo que alivia o peso que carrega.</div>
+
+        <div class="card-label">Linguagem</div>
+        <table class="lang-table">
+          <thead><tr><th class="use">✅ Use</th><th class="evite">❌ Evite</th></tr></thead>
+          <tbody>
+            <tr><td class="use-cell">"Menos horas perdidas"</td><td class="evite-cell">"Transformação digital"</td></tr>
+            <tr><td class="use-cell">"Você não carrega mais sozinho"</td><td class="evite-cell">"Plataforma inteligente"</td></tr>
+            <tr><td class="use-cell">"É nos centavos que a gente ganha"</td><td class="evite-cell">"ROI em 3 anos"</td></tr>
+            <tr><td class="use-cell">"Controle que você consegue provar"</td><td class="evite-cell">"Disruption"</td></tr>
+          </tbody>
+        </table>
+
+        <div class="card-label">Template — Meta / WhatsApp</div>
+        <div class="template-box">Ainda faz conferência manual todo dia?
+
+Com Prolog você vê tudo em tempo real
+— sem planilha, sem retrabalho,
+sem depender de ninguém.
+
+Implementação em 7 dias.
+
+→ Teste agora</div>
+        <span class="cta-badge">CTA: "Teste agora →"</span>
+
+        <div class="card-label">Mídias Recomendadas</div>
+        <div class="midias-list">
+          <span class="midia-tag">Vídeo curto</span>
+          <span class="midia-tag">WhatsApp</span>
+          <span class="midia-tag">Instagram</span>
+          <span class="midia-tag">Demo ao vivo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- INFLUENCIADOR -->
+    <div class="persona-card influenciador-card">
+      <div class="persona-card-header influenciador">
+        <span class="persona-emoji">🗣️</span>
+        <div class="persona-role">Influenciador</div>
+        <div class="persona-name">João Farias</div>
+        <div class="persona-quote">"Preciso de ferramenta que sustente a decisão, não que complique a rotina."</div>
+      </div>
+      <div class="persona-card-body">
+        <div class="card-label">Botão de Decisão</div>
+        <div class="botao-decisao">Ele decide quando tem <strong>confiança de que vai funcionar na prática</strong> — e que pode recomendar sem se arriscar.</div>
+
+        <div class="card-label">Linguagem</div>
+        <table class="lang-table">
+          <thead><tr><th class="use">✅ Use</th><th class="evite">❌ Evite</th></tr></thead>
+          <tbody>
+            <tr><td class="use-cell">"Cabe na sua rotina"</td><td class="evite-cell">"Revolucionário"</td></tr>
+            <tr><td class="use-cell">"Testado em empresas similares"</td><td class="evite-cell">"Melhor do mercado"</td></tr>
+            <tr><td class="use-cell">"Integra com o que você já usa"</td><td class="evite-cell">"Requer pouco esforço" (suspeita)</td></tr>
+            <tr><td class="use-cell">"Suporte durante todo o processo"</td><td class="evite-cell">"Transformação completa"</td></tr>
+          </tbody>
+        </table>
+
+        <div class="card-label">Template — Anúncio</div>
+        <div class="template-box">"Será que vai funcionar
+na minha operação?"
+
+Essa é a pergunta certa.
+
+Prolog foi implementado em [N] empresas
+com estrutura similar à sua. Em média:
+— 30 dias para estar rodando
+— 2 horas para treinar a equipe
+— Integração total com ERP/BI
+
+→ Veja como funciona em empresa similar</div>
+        <span class="cta-badge">CTA: "Veja como funciona →"</span>
+
+        <div class="card-label">Mídias Recomendadas</div>
+        <div class="midias-list">
+          <span class="midia-tag">Case studies</span>
+          <span class="midia-tag">Webinar técnico</span>
+          <span class="midia-tag">Trial guiado</span>
+          <span class="midia-tag">LinkedIn técnico</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCKER -->
+    <div class="persona-card blocker-card">
+      <div class="persona-card-header blocker">
+        <span class="persona-emoji">🚫</span>
+        <div class="persona-role">Blocker</div>
+        <div class="persona-name">Marcos Silveira</div>
+        <div class="persona-quote">"Ferramenta que aumenta retrabalho não resolve problema, cria outro."</div>
+      </div>
+      <div class="persona-card-body">
+        <div class="card-label">Botão de Decisão</div>
+        <div class="botao-decisao">Ele libera quando percebe que a solução <strong>não vai quebrar nada que já funciona</strong> — e que o custo de continuar sem ela é maior que o risco de adotar.</div>
+
+        <div class="card-label">Linguagem</div>
+        <table class="lang-table">
+          <thead><tr><th class="use">✅ Use</th><th class="evite">❌ Evite</th></tr></thead>
+          <tbody>
+            <tr><td class="use-cell">"Integração comprovada com ERP/BI"</td><td class="evite-cell">"Mudança radical"</td></tr>
+            <tr><td class="use-cell">"Zero impacto nos sistemas atuais"</td><td class="evite-cell">"Simples de implementar"</td></tr>
+            <tr><td class="use-cell">"Implantação gradual, faseada"</td><td class="evite-cell">"Vai melhorar tudo"</td></tr>
+            <tr><td class="use-cell">"Rollback seguro disponível"</td><td class="evite-cell">"Confie no processo"</td></tr>
+          </tbody>
+        </table>
+
+        <div class="card-label">Template — Email Técnico</div>
+        <div class="template-box">Marcos,
+
+Antes de avançar, você provavelmente
+quer saber:
+✓ Como integra com ERP/BI/Telemetria
+✓ O que muda (e o que não muda)
+✓ Como é feita a migração de dados
+✓ SLA e suporte durante implantação
+✓ Como reverter se necessário
+
+Posso mandar documentação técnica
+antes de qualquer reunião?
+
+Não precisa decidir nada agora.</div>
+        <span class="cta-badge">CTA: "Consulte arquitetura →"</span>
+
+        <div class="card-label">Mídias Recomendadas</div>
+        <div class="midias-list">
+          <span class="midia-tag">Documentação técnica</span>
+          <span class="midia-tag">White paper</span>
+          <span class="midia-tag">POC técnico</span>
+          <span class="midia-tag">Reunião estruturada</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /personas-grid -->
+
+  <!-- JORNADA DE COMPRA -->
+  <div class="jornada-section">
+    <div class="section-title">Jornada de Compra — Mensagem Certa, Momento Certo</div>
+    <p style="font-size:14px;color:var(--gray);margin-bottom:4px;">Cada persona tem um papel em cada etapa. Saber disso evita enviar a mensagem errada na hora errada.</p>
+    <div class="jornada-steps">
+      <div class="jornada-step">
+        <div class="step-num">Estágio 1</div>
+        <div class="step-title">Consciência do Problema</div>
+        <div class="step-personas">
+          <span class="step-persona c">👑 Champion — sente a dor</span>
+          <span class="step-persona i">🗣️ Influenciador — percebe risco</span>
+          <span class="step-persona d" style="opacity:.35">🖊️ Decisor — ainda fora</span>
+          <span class="step-persona b" style="opacity:.35">🚫 Blocker — ainda fora</span>
+        </div>
+      </div>
+      <div class="jornada-step">
+        <div class="step-num">Estágio 2</div>
+        <div class="step-title">Busca de Solução</div>
+        <div class="step-personas">
+          <span class="step-persona c">👑 Champion — busca ferramenta</span>
+          <span class="step-persona i">🗣️ Influenciador — estrutura o problema</span>
+          <span class="step-persona d">🖊️ Decisor — percebe o custo</span>
+          <span class="step-persona b" style="opacity:.35">🚫 Blocker — ainda fora</span>
+        </div>
+      </div>
+      <div class="jornada-step">
+        <div class="step-num">Estágio 3</div>
+        <div class="step-title">Avaliação</div>
+        <div class="step-personas">
+          <span class="step-persona i">🗣️ Influenciador — qualifica e apresenta</span>
+          <span class="step-persona c">👑 Champion — valida na prática</span>
+          <span class="step-persona b">🚫 Blocker — levanta objeções</span>
+          <span class="step-persona d">🖊️ Decisor — pergunta sobre ROI</span>
+        </div>
+      </div>
+      <div class="jornada-step">
+        <div class="step-num">Estágio 4</div>
+        <div class="step-title">Decisão</div>
+        <div class="step-personas">
+          <span class="step-persona b">🚫 Blocker — libera (ou veta)</span>
+          <span class="step-persona d">🖊️ Decisor — assina</span>
+          <span class="step-persona c">👑 Champion — implanta</span>
+          <span class="step-persona i">🗣️ Influenciador — garante aderência</span>
+        </div>
+      </div>
+      <div class="jornada-step">
+        <div class="step-num">Estágio 5</div>
+        <div class="step-title">Pós-venda / Expansão</div>
+        <div class="step-personas">
+          <span class="step-persona c">👑 Champion — termômetro</span>
+          <span class="step-persona i">🗣️ Influenciador — indicações</span>
+          <span class="step-persona d">🖊️ Decisor — avalia renovação</span>
+          <span class="step-persona b">🚫 Blocker — verifica entrega</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGRAS DE OURO -->
+  <div class="regras-section">
+    <div class="section-title">Regras de Ouro para Agentes de Copy</div>
+    <div class="regras-grid">
+      <div class="regra-item">
+        <div class="regra-num">Regra 1</div>
+        Identifique a persona <strong>antes de escrever</strong> — uma palavra errada no headline desqualifica tudo.
+      </div>
+      <div class="regra-item">
+        <div class="regra-num">Regra 2</div>
+        <strong>Prova social adequada à persona:</strong> Decisor quer ROI; Champion quer depoimento de par; Influenciador quer case similar; Blocker quer documentação.
+      </div>
+      <div class="regra-item">
+        <div class="regra-num">Regra 3</div>
+        <strong>CTA revela a persona:</strong> "Veja o case" ≠ "Teste agora" ≠ "Consulte arquitetura" — cada um fala um idioma diferente.
+      </div>
+      <div class="regra-item">
+        <div class="regra-num">Regra 4</div>
+        <strong>Blocker é o gargalo</strong> — se a copy não passa no filtro dele, nada avança. Nunca ignore-o.
+      </div>
+      <div class="regra-item">
+        <div class="regra-num">Regra 5</div>
+        <strong>Champion é o amplificador</strong> — se ele abraça, o boca a boca é orgânico e poderoso.
+      </div>
+      <div class="regra-item">
+        <div class="regra-num">Regra 6</div>
+        <strong>Influenciador é a porta de entrada</strong> — copy dele precisa ser "confiável, não entusiasmada".
+      </div>
+      <div class="regra-item">
+        <div class="regra-num">Regra 7</div>
+        <strong>Uma campanha completa atinge os 4</strong> — cada peça para uma persona, não uma peça genérica para todos.
+      </div>
+      <div class="regra-item">
+        <div class="regra-num">Regra 8</div>
+        Blocker convencido <strong>vira aliado poderoso.</strong> "Até o Marcos aprovou" é mais convincente que qualquer promessa comercial.
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="checklist-section">
+    <div class="section-title">Checklist — Antes de Publicar Qualquer Copy</div>
+    <div class="checklist-cols">
+      <div class="checklist-group">
+        <h4>Identificação &amp; Linguagem</h4>
+        <ul>
+          <li><span class="check-box"></span>Sei para qual persona estou escrevendo?</li>
+          <li><span class="check-box"></span>A copy foi pensada para essa persona específica?</li>
+          <li><span class="check-box"></span>Estou na mídia certa para atingir essa persona?</li>
+          <li><span class="check-box"></span>Em qual estágio da jornada ela está?</li>
+          <li><span class="check-box"></span>Uso pelo menos 1 palavra-gatilho da persona?</li>
+          <li><span class="check-box"></span>Evitei os termos bloqueadores?</li>
+          <li><span class="check-box"></span>O tom está correto?</li>
+        </ul>
+      </div>
+      <div class="checklist-group">
+        <h4>Persuasão &amp; Dinâmica</h4>
+        <ul>
+          <li><span class="check-box"></span>A copy ativa o botão de decisão da persona?</li>
+          <li><span class="check-box"></span>Há pelo menos 1 prova adequada ao perfil?</li>
+          <li><span class="check-box"></span>Se houver objeção óbvia, ela é antecipada?</li>
+          <li><span class="check-box"></span>O CTA é adequado para a persona e o estágio?</li>
+          <li><span class="check-box"></span>Se para Decisor: tem algo que o Influenciador possa levar a ele?</li>
+          <li><span class="check-box"></span>Se para Champion: tem depoimento de par?</li>
+          <li><span class="check-box"></span>Se para Blocker: tem documentação técnica disponível?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROMPT IA -->
+  <div class="prompt-section">
+    <div class="section-title">Prompt para Criar Copy com IA</div>
+    <p style="font-size:14px;color:var(--gray);margin-bottom:20px;">Cole este prompt em qualquer IA (Claude, ChatGPT, Gemini). Preencha os campos entre <strong style="color:var(--orange)">[colchetes]</strong> antes de enviar.</p>
+
+    <div class="prompt-card">
+      <div class="prompt-card-header">
+        <span class="prompt-icon">🤖</span>
+        <div>
+          <div class="prompt-title">Prompt Universal — Copy por Persona Prolog</div>
+          <div class="prompt-sub">Funciona para anúncio, email, vídeo, landing page ou post</div>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt()">Copiar prompt</button>
+      </div>
+
+      <div class="prompt-body" id="prompt-text">Você é um especialista em copywriting B2B para empresas de gestão de frota.
+
+Preciso que você crie uma peça de copy para a Prolog App seguindo rigorosamente as instruções abaixo.
+
+## PERSONA-ALVO
+- Nome da persona: [Decisor / Champion / Influenciador / Blocker]
+- Perfil resumido:
+  - Decisor (Carlos, 52) → quer controle, previsibilidade e ROI comprovado
+  - Champion (Rogério, 38) → quer alívio operacional e resultado imediato
+  - Influenciador (João, 39) → quer confiança de que vai funcionar na prática
+  - Blocker (Marcos, 47) → quer garantia de que não vai quebrar nada existente
+
+## PEÇA SOLICITADA
+- Formato: [anúncio LinkedIn / email / roteiro de vídeo / post Instagram / landing page / WhatsApp]
+- Estágio da jornada: [Consciência / Consideração / Decisão]
+- Comprimento: [curto (até 5 linhas) / médio (até 15 linhas) / longo]
+
+## PRODUTO / MENSAGEM
+- O que estamos promovendo: [ex: rastreamento de frota em tempo real / gestão de pneus / controle de manutenção]
+- Diferencial principal: [ex: visibilidade em tempo real sem planilha / implementação em 7 dias / integração com ERP]
+- Número ou prova disponível: [ex: redução de 23% no custo / ROI médio de 8 meses / case da Transportadora X]
+
+## REGRAS OBRIGATÓRIAS
+1. Use pelo menos UMA das palavras-gatilho da persona
+2. Evite todos os termos bloqueadores da persona
+3. Inclua o CTA adequado: Decisor → "Veja o case"; Champion → "Teste agora"; Influenciador → "Veja como funciona"; Blocker → "Consulte arquitetura"
+4. Tom: Decisor = profissional/dados | Champion = direto/prático | Influenciador = pragmático/técnico | Blocker = cauteloso/estruturado
+5. NÃO use: "revolucionário", "disruptivo", "solução completa", "transformação total", "inovador"
+6. A copy deve passar no teste: "essa persona específica reconheceria o problema descrito?"
+
+## OUTPUT ESPERADO
+Entregue:
+1. A peça de copy pronta para uso
+2. Uma linha explicando qual gatilho principal foi usado
+3. Uma sugestão de A/B test (versão alternativa do headline)</div>
+
+      <div class="prompt-vars">
+        <div class="vars-title">Campos para preencher antes de enviar:</div>
+        <div class="vars-grid">
+          <div class="var-item"><span class="var-tag decisor">Persona</span> Decisor / Champion / Influenciador / Blocker</div>
+          <div class="var-item"><span class="var-tag champion">Formato</span> anúncio / email / vídeo / post / landing page</div>
+          <div class="var-item"><span class="var-tag influenciador">Estágio</span> Consciência / Consideração / Decisão</div>
+          <div class="var-item"><span class="var-tag blocker">Produto</span> O que está sendo promovido nessa campanha</div>
+          <div class="var-item"><span class="var-tag decisor">Diferencial</span> O argumento principal dessa peça</div>
+          <div class="var-item"><span class="var-tag champion">Prova</span> Número, case ou depoimento disponível</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXEMPLO PREENCHIDO -->
+    <div class="example-card">
+      <div class="example-header">Exemplo preenchido — Champion, anúncio Meta, Consideração</div>
+      <div class="example-body">...Persona-alvo: <strong>Champion (Rogério, 38)</strong>
+Formato: <strong>anúncio Instagram/Meta</strong>
+Estágio: <strong>Consideração</strong>
+Produto: <strong>rastreamento de frota em tempo real</strong>
+Diferencial: <strong>visibilidade sem planilha, implementação em 7 dias</strong>
+Prova: <strong>redução de 40% no retrabalho operacional</strong></div>
+    </div>
+
+  </div><!-- /prompt-section -->
+
+</div><!-- /container -->
+
+<footer class="footer">
+  Criado por <strong>LLM Wiki Agent</strong> · <span>Prolog App</span> &nbsp;|&nbsp; Q1 2026 &nbsp;|&nbsp; Atualizar quando: novas personas identificadas, novos cases validados, mudança de produto.
+</footer>
+
+<script>
+  function copyPrompt() {
+    const text = document.getElementById('prompt-text').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = 'Copiado!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copiar prompt';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+</script>
+</body>
+</html>
